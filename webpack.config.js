@@ -3,6 +3,7 @@ const ejs = require('ejs');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const ExtensionReloader = require('webpack-extension-reloader');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const { version } = require('./package.json');
 
@@ -31,17 +32,41 @@ const config = {
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
+      // {
+      //   test: /\.css$/,
+      //   use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      // },
+      // {
+      //   test: /\.scss$/,
+      //   use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+      // },
+      // {
+      //   test: /\.sass$/,
+      //   use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader?indentedSyntax'],
+      // },
       {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
-      {
-        test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
-      },
-      {
-        test: /\.sass$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader?indentedSyntax'],
+        test: /\.s(c|a)ss$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            // Requires sass-loader@^7.0.0
+            options: {
+              implementation: require('sass'),
+              fiber: require('fibers'),
+              indentedSyntax: true, // optional
+            },
+            // Requires sass-loader@^8.0.0
+            options: {
+              implementation: require('sass'),
+              sassOptions: {
+                fiber: require('fibers'),
+                indentedSyntax: true, // optional
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg|ico)$/,
@@ -68,6 +93,7 @@ const config = {
       global: 'window',
     }),
     new VueLoaderPlugin(),
+    new VuetifyLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),

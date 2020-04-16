@@ -1,8 +1,10 @@
 {
   "name": "devstoragemanager",
   "description": "A Vue.js web extension",
+  "offline_enabled": true,
   "version": null,
   "manifest_version": 2,
+  "permissions": ["storage", "activeTab", "tabs"],
   "icons": {
     "48": "icons/icon_48.png",
     "128": "icons/icon_128.png"
