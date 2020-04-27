@@ -1,7 +1,7 @@
 {
-  "name": "devstoragemanager",
+  "name": "cookieDebugger",
   "version": "1.0.0",
-  "description": "A Vue.js web extension",
+  "description": "cookie Debugger extension",
   "author": "Łukasz Wołodkiewicz",
   "license": "MIT",
   "engines": {

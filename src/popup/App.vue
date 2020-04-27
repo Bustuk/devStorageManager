@@ -1,10 +1,20 @@
 <template>
   <div id="app">
     <v-app>
-      <v-app-bar>
-        <v-toolbar-title>devStorageManager</v-toolbar-title>
-        <v-btn v-on:click="getAllUsersTab" v-if="condition" color="success">Click</v-btn>
-      </v-app-bar>
+      <v-container>
+        <v-toolbar-title>cookie Debugger</v-toolbar-title>
+        <v-btn v-on:click="openTab" color="success">Open tab</v-btn>
+        <v-btn v-on:click="listCookies" color="primary">List Cookies</v-btn>
+
+        <v-card max-width="300" tile>
+          <v-list-item two-line v-for="cookie in cookies" :key="cookie.name">
+            <v-list-item-content>
+              <v-list-item-title>Key: {{ cookie.name }}</v-list-item-title>
+              <v-list-item-subtitle>Value: {{ cookie.value }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-container>
     </v-app>
   </div>
 </template>
@@ -13,28 +23,20 @@
 export default {
   data() {
     return {
-      condition: true,
-      tabs: null,
+      cookies: null,
     };
   },
-  mounted() {
-    chrome.extension.getBackgroundPage().console.log(window);
-  },
   methods: {
-    getAllUsersTab() {
-      chrome.tabs.query({}, tabs => {
-        chrome.extension.getBackgroundPage().console.log(tabs);
-        // this.tabs = tabs;
-        this.filt(tabs);
+    listCookies() {
+      chrome.cookies.getAll({ url: 'http://localhost' }, cookies => {
+        chrome.extension.getBackgroundPage().console.log(cookies);
+        console.log(cookies);
+        this.cookies = cookies;
       });
     },
-    filt(tabs) {
-      tabs.forEach(tab => {
-        if (tab.url && tab.url.includes('google')) {
-          chrome.extension.getBackgroundPage().console.log(tab.url, 'znaleziono');
-        }
-      });
-      // chrome.extension.getBackgroundPage().console.log(this.tabs,"??")
+    openTab() {
+      const newURL = chrome.runtime.getURL('popup/popup.html');
+      chrome.tabs.create({ url: newURL });
     },
   },
 };
